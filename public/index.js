@@ -1,8 +1,3 @@
-export class HashRouter {
-  url = "";
+import { HashRouter } from "./routing.js";
 
-  constructor() {
-    this.url = window.location.href;
-    console.log("1");
-  }
-}
+new HashRouter();

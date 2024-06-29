@@ -1,3 +1,3 @@
-import { HashRouter } from "./routing.js";
+import { HashRouter } from "./routing/routing.js";
 
 new HashRouter();

@@ -15,10 +15,6 @@ export class HashRouter {
           location: { pathname },
         } = window;
 
-        // linkPathname: "/no-deps-page/public/page-2"
-        // pathname: "/no-deps-page/public/"
-        // hash: "#/no-deps-page/public/page-2"
-
         let dedupedLinkPathname = linkPathname;
 
         if (pathname !== "/") {
@@ -33,7 +29,7 @@ export class HashRouter {
 
   addListeners(listeners) {
     const emitRouteChange = (listeners) => {
-      const currentRoute = this.getCurrentHash().split("#/")[1];
+      const currentRoute = this.getCurrentHashRoute();
       listeners.forEach((listener) => listener(currentRoute ?? "/"));
     };
 
@@ -45,7 +41,7 @@ export class HashRouter {
     });
   }
 
-  getCurrentHash() {
-    return window.location.hash;
+  getCurrentHashRoute() {
+    return window.location.hash.split("#/")[1];
   }
 }

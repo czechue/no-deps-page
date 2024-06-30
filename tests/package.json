@@ -1,0 +1,17 @@
+{
+  "name": "tests",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^14.12.3",
+    "@types/bun": "latest",
+    "@testing-library/dom": "10.2.0",
+    "@testing-library/user-event": "14.5.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

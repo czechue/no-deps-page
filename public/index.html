@@ -26,8 +26,13 @@
       <section>
         <h2>Here's the plan:</h2>
 
+        <h3><i>30.06.2024</i></h3>
+
         <ul>
-          <li>Use 2024 versions of HTML, CSS, JavaScript, and Node.js.</li>
+          <li>
+            Use 2024 versions of HTML, CSS, JavaScript, and <s>Node.js</s>.
+            <i>(However, I decided to use Bun (I can't answer why))</i>
+          </li>
           <li>Rely solely on current browsers.</li>
           <li>Avoid any libraries.</li>
           <li>Create both a website and a simple application.</li>
@@ -39,8 +44,8 @@
             The page you are reading now will also be part of the project.
           </li>
           <li>
-            I may allow small deviations from these guidelines if they make
-            sense (e.g., not using outdated browsers, not avoiding Git, or not
+            I may allow deviations from these guidelines if they make sense
+            (e.g., not using outdated browsers, not avoiding Git, or not
             creating a text formatter from scratch).
           </li>
         </ul>
@@ -55,8 +60,60 @@
       </section>
 
       <section>
-        <h2>Local development</h2>
-        <p>We will need some kind of dev server</p>
+        <h2>Local server</h2>
+        <p>
+          Due to the fact that we want to use the benefits of ESM - we need some
+          server for local development. My choice instead of the standard
+          <b>node.js</b> environment fell on <b>bun</b>, which I have not had
+          the opportunity to use so far. No hot reload to start with - but the
+          potential implementation of this functionality in the future sounds
+          interesting.
+        </p>
+
+        <p>The whole config boils down to a very simple static file server:</p>
+
+        <pre>
+        const ASSETS_DIRECTORY = "/../public";
+
+        const server = Bun.serve({
+            port: 3000,
+            async fetch(req) {
+            const rootPath = import.meta.dirname;
+            let pathName = new URL(req.url).pathname;
+
+            if (pathName === "/") {
+              pathName = "/index.html"
+            }
+
+            const publicDirectoryPath = `${rootPath}${ASSETS_DIRECTORY}`;
+            const requestedFile = publicDirectoryPath + pathName;
+
+            return new Response(Bun.file(requestedFile);
+          },
+        });
+
+        console.log(`Listening on http://localhost:${server.port} ...`);
+        </pre>
+
+        <p>Ok, now how it works.</p>
+        <ul>
+          <li>
+            go to the address <i>http://localhost:3000/</i> - the server returns
+            the file <b>index.html</b>
+          </li>
+          <li>
+            in the <i>index.html</i> file there are links to <i>index.js</i> and
+            <i>styles.css</i> which <b>index.html</b> requests, sending the
+            server one request after another:
+            <b>http://localhost:3000/index.js</b> and
+            <b>http://localhost:3000/styles.css</b>
+          </li>
+          <li>
+            based on the file names - if the file name matches the
+            <b>req.url</b> query, the server returns the contents of the
+            `public` directory - simple
+          </li>
+        </ul>
       </section>
 
       <section id="routing-section" data-role="routing-section">
@@ -70,6 +127,21 @@
             <a data-role="link" href="page-1">Page 1</a>
             <a data-role="link" href="page-2">Page 2</a>
           </div>
+        </div>
+      </section>
+
+      <section id="testing-section">
+        <h2>Testing</h2>
+        <div>
+          <p>
+            Here I decided to let go of the no-deps approach altogether. I do
+            not see much point in creating tests in a post-apocalyptic version.
+          </p>
+          <p>
+            For variety, instead of using the currently most popular stack
+            (vitest / jest) - I also used bun. From the new libraries I used the
+            <b>happy-dom</b> recommended by bun documentation.
+          </p>
         </div>
       </section>
     </article>

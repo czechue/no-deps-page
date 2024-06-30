@@ -12,8 +12,6 @@ const server = Bun.serve({
 
     const publicDirectoryPath = `${rootPath}${ASSETS_DIRECTORY}`;
 
-    console.log("pathname", pathName);
-
     const requestedFile = publicDirectoryPath + pathName;
 
     return new Response(Bun.file(requestedFile));
